@@ -12,10 +12,10 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
-    },
-    "ios": {
-      "image": "latest"
+      "autoIncrement": true,
+      "ios": {
+        "image": "latest"
+      }
     }
   },
   "submit": {
