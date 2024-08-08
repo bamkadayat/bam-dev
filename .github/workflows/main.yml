@@ -96,11 +96,8 @@ jobs:
       - name: Upload to TestFlight
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          eas submit --platform ios --profile production --latest --apple-id $APPLE_ID --apple-team-id $APPLE_TEAM_ID --apple-app-specific-password $APPLE_APP_SPECIFIC_PASSWORD --non-interactive || {
+          eas submit --platform ios --latest --non-interactive || {
             cat .eas/eas.log;
             exit 1;
           }
