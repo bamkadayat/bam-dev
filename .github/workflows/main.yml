@@ -5,7 +5,8 @@ on:
     branches:
       - main
 permissions:
-    contents: write
+  contents: write
+
 jobs:
   bump-version:
     name: Bump Version
@@ -34,18 +35,12 @@ jobs:
       - name: Increment version
         id: bump-version
         run: |
-          # Extract current version from app.json
           current_version=$(jq -r '.expo.version' app.json)
-          # Split version into an array
           IFS='.' read -r -a version_parts <<< "$current_version"
-          # Increment the patch version
           ((version_parts[2]++))
-          # Join array back into a version string
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
           echo "New version: $new_version"
-          # Update app.json with the new version
           jq --arg new_version "$new_version" '.expo.version = $new_version' app.json > tmp.$$.json && mv tmp.$$.json app.json
-          # Update package.json with the new version if needed
           if [ -f package.json ]; then
             jq --arg new_version "$new_version" '.version = $new_version' package.json > tmp.$$.json && mv tmp.$$.json package.json
           fi
@@ -109,9 +104,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          echo "Submitting to TestFlight..."
           eas submit --platform ios --profile production --latest --apple-id $APPLE_ID --apple-team-id $APPLE_TEAM_ID --apple-app-specific-password $APPLE_APP_SPECIFIC_PASSWORD --non-interactive || {
-            echo "Submission failed. Debug information:";
             cat .eas/eas.log;
             exit 1;
           }
