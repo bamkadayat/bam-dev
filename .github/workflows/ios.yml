@@ -1,4 +1,4 @@
-name: Bump Version, Build, and Deploy to App Store
+name: Bump Version, Build, and Deploy to TestFlight
 
 on:
   push:
@@ -10,16 +10,25 @@ permissions:
 
 jobs:
   bump-version:
+    name: Bump Version
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: "14.x"
+          node-version: 18.x
+          cache: yarn
 
       - name: Install jq
         run: sudo apt-get install -y jq
@@ -60,28 +69,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: "14.x"
+          node-version: 18.x
+          cache: yarn
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Install Expo CLI
-        run: npm install -g expo-cli
-
-      - name: Install EAS CLI
-        run: npm install -g eas-cli
-
-      - name: Log in to Expo
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: |
-          expo login --token $EXPO_TOKEN
+        run: yarn install
 
       - name: Configure EAS
         run: eas configure
@@ -101,7 +112,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           echo "Submitting to TestFlight..."
-          eas submit --platform ios --profile production --latest --apple-id $APPLE_ID --apple-team-id $APPLE_TEAM_ID --asc-app-id $APPLE_APP_SPECIFIC_PASSWORD --non-interactive || {
+          eas submit --platform ios --profile production --latest --apple-id $APPLE_ID --apple-team-id $APPLE_TEAM_ID --apple-app-specific-password $APPLE_APP_SPECIFIC_PASSWORD --non-interactive || {
             echo "Submission failed. Debug information:";
             cat .eas/eas.log;
             exit 1;
