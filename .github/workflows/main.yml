@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-permissions:
-  contents: write
 
 jobs:
   bump-version:
@@ -93,8 +91,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Configure EAS
-        run: eas configure
+      - name: Configure EAS Build
+        run: eas build:configure
 
       - name: EAS build for iOS
         env:
