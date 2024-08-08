@@ -97,7 +97,7 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          eas submit --platform ios --latest --non-interactive --asc-app-id ${{ secrets.APPLE_APP_ID }} || {
+          eas submit --platform ios --latest --non-interactive || {
             cat .eas/eas.log;
             exit 1;
           }

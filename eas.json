@@ -24,7 +24,9 @@
   "submit": {
     "production": {
       "ios": {
-        "ascAppId": "6612020672"  
+        "appleId": "bamkadayat@gmail.com",
+        "ascAppId": "6612020672",
+        "appleTeamId": "6KXL5DZFRT"  
       }
     }
   }
