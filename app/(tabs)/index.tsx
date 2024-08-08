@@ -4,8 +4,10 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import Constants from 'expo-constants';
 
 export default function HomeScreen() {
+  const version = Constants.expoConfig?.version ?? '1.0.0';
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -15,12 +17,12 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView>
         <ThemedText type="title">Welcome Bam!</ThemedText>
         <HelloWave />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">This is the update from github: 1.0.9</ThemedText>
+      <ThemedView>
+        <ThemedText type="subtitle">This is the update from github</ThemedText>
         <ThemedText>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
           Press{' '}
@@ -35,6 +37,9 @@ export default function HomeScreen() {
         <ThemedText>
           Tap the Explore tab to learn more about what's included in this starter app.
         </ThemedText>
+      </ThemedView>
+      <ThemedView>
+        <ThemedText style={{ color:'green', fontWeight:'bold'}}>App Version: {version}</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -58,3 +63,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+
+
