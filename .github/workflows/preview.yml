@@ -35,8 +35,5 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Configure EAS Build
-        run: eas build:configure
-
       - name: Create preview
         run: eas update --auto

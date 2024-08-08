@@ -6,7 +6,6 @@ on:
       - main
 permissions:
   contents: write
-
 jobs:
   bump-version:
     name: Bump Version
@@ -86,9 +85,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-
-      - name: Configure EAS Build
-        run: eas build:configure
 
       - name: EAS build for iOS
         env:
