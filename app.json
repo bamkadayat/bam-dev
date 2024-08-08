@@ -41,6 +41,12 @@
         "projectId": "9ba8b0fa-6d2a-4ca8-beb5-8d41cc03a697"
       }
     },
-    "owner": "bamkc"
+    "owner": "bamkc",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9ba8b0fa-6d2a-4ca8-beb5-8d41cc03a697"
+    }
   }
 }
