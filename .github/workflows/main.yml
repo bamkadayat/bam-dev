@@ -91,13 +91,13 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EAS_BUILD_PROFILE: production
         run: |
-          eas build --platform ios --profile production --non-interactive --no-wait
+          eas build --platform ios --profile production --non-interactive
 
       - name: Upload to TestFlight
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          eas submit --platform ios || {
+          eas submit --platform ios --latest --non-interactive --asc-app-id ${{ secrets.APPLE_APP_ID }} || {
             cat .eas/eas.log;
             exit 1;
           }
