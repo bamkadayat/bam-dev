@@ -47,11 +47,14 @@ jobs:
             echo "Version format is incorrect. Expected format: x.y.z"
             exit 1
           fi
+          echo "Incrementing patch version"
           ((version_parts[2]++))
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
           echo "New version: $new_version"
+          echo "Updating app.json with new version"
           jq --arg new_version "$new_version" '.expo.version = $new_version' app.json > tmp.$$.json && mv tmp.$$.json app.json
           if [ -f package.json ]; then
+            echo "Updating package.json with new version"
             jq --arg new_version "$new_version" '.version = $new_version' package.json > tmp.$$.json && mv tmp.$$.json package.json
           fi
 
@@ -108,7 +111,7 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          eas submit --platform --latest --non-interactive || {
+          eas submit --platform ios --latest --non-interactive || {
             cat .eas/eas.log;
             exit 1;
           }
