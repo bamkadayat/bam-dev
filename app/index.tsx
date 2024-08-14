@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "@/constants/images";
 import CustomButton from "@/components/CustomButton";
-import LoginButton from "@/components/loginButton";
+import LoginButton from "@/components/LoginButton";
 
 import { router } from "expo-router";
 
