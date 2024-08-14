@@ -48,14 +48,14 @@ jobs:
             exit 1
           fi
           echo "Incrementing patch version"
-          ((version_parts[2]++))
+          ((version_parts[2]++)) || { echo "Failed to increment patch version"; exit 1; }
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
           echo "New version: $new_version"
           echo "Updating app.json with new version"
-          jq --arg new_version "$new_version" '.expo.version = $new_version' app.json > tmp.$$.json && mv tmp.$$.json app.json
+          jq --arg new_version "$new_version" '.expo.version = $new_version' app.json > tmp.$$.json && mv tmp.$$.json app.json || { echo "Failed to update app.json"; exit 1; }
           if [ -f package.json ]; then
             echo "Updating package.json with new version"
-            jq --arg new_version "$new_version" '.version = $new_version' package.json > tmp.$$.json && mv tmp.$$.json package.json
+            jq --arg new_version "$new_version" '.version = $new_version' package.json > tmp.$$.json && mv tmp.$$.json package.json || { echo "Failed to update package.json"; exit 1; }
           fi
 
       - name: Commit version bump
