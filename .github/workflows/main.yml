@@ -47,9 +47,17 @@ jobs:
             echo "Version format is incorrect. Expected format: x.y.z"
             exit 1
           fi
-          echo "Incrementing patch version"
-          ((version_parts[2]++)) || { echo "Failed to increment patch version"; exit 1; }
-          new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
+          echo "Version parts: ${version_parts[@]}"
+          major=${version_parts[0]}
+          minor=${version_parts[1]}
+          patch=${version_parts[2]}
+          echo "Parsed version - Major: $major, Minor: $minor, Patch: $patch"
+          if ! [[ "$patch" =~ ^[0-9]+$ ]]; then
+            echo "Patch version is not a number: $patch"
+            exit 1
+          fi
+          patch=$((patch + 1))
+          new_version="${major}.${minor}.${patch}"
           echo "New version: $new_version"
           echo "Updating app.json with new version"
           jq --arg new_version "$new_version" '.expo.version = $new_version' app.json > tmp.$$.json && mv tmp.$$.json app.json || { echo "Failed to update app.json"; exit 1; }
