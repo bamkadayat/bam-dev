@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "bam-dev",
-    "slug": "bam-dev",
+    "name": "bam-react-app",
+    "slug": "bam-react-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "bam-dev",
+    "scheme": "bam-react-app",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bamkc.bamdev"
+      "bundleIdentifier": "com.bamkc.bamreactapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -38,7 +38,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "cffa76b6-a166-4652-b5b0-e58dd8bb20f4"
+        "projectId": "789c4016-ab68-4dbe-91d9-69c51b92f6e6"
       }
     },
     "owner": "bamkc",
