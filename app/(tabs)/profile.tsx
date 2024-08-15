@@ -1,6 +1,7 @@
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { Link, router } from "expo-router";
+import Constants from 'expo-constants';
 
 const Profile = () => {
   const handleLogout = () => {
@@ -9,6 +10,8 @@ const Profile = () => {
     // Redirect to the welcome screen
     router.replace("/");
   };
+
+  const version = Constants.expoConfig?.version ?? '1.0.0';
 
   return (
     <SafeAreaView className="bg-gray-900 flex-1">
@@ -25,7 +28,7 @@ const Profile = () => {
           </View>
           <View className="bg-gray-800 p-4 rounded-lg mb-4">
             <Text className="text-xl font-semibold text-white">Your Stats</Text>
-            <Text className="text-md text-gray-400">Here are your latest stats.</Text>
+            <Text className="text-md text-gray-400">App Version: {version}</Text>
           </View>
           <TouchableOpacity
             className="bg-red-600 p-4 rounded-lg mt-4"
