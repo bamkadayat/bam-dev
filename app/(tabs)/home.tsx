@@ -8,7 +8,7 @@ const Home = () => {
         <View className="flex-1 p-4">
           <Text className="text-3xl font-bold text-white mb-4">Home</Text>
           <View className="bg-gray-800 p-4 rounded-lg mb-4">
-            <Text className="text-xl font-semibold text-white">Welcome Back!</Text>
+            <Text className="text-xl font-semibold text-white">Welcome. Please explore the dashboard.</Text>
             <Text className="text-md text-gray-400">Here's a summary of your activity.</Text>
           </View>
           <View className="bg-gray-800 p-4 rounded-lg mb-4">

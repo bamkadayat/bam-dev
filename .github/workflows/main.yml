@@ -3,7 +3,7 @@ name: Bump Version, Build, and Deploy to TestFlight
 on:
   push:
     branches:
-      - main
+      - production
 permissions:
   contents: write
 jobs:
