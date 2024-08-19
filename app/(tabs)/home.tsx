@@ -17,7 +17,7 @@ const Home = () => {
           </View>
           <View className="bg-gray-800 p-4 rounded-lg">
             <Text className="text-xl font-semibold text-white">Your Stats</Text>
-            <Text className="text-md text-gray-400">Here are your latest stats.</Text>
+            <Text className="text-md text-gray-400">Updated from github.</Text>
           </View>
         </View>
       </ScrollView>
