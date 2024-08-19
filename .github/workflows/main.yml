@@ -4,8 +4,10 @@ on:
   push:
     branches:
       - production
+
 permissions:
   contents: write
+
 jobs:
   bump-version:
     name: Bump Version
@@ -68,7 +70,7 @@ jobs:
           if [ -f package.json ]; then git add package.json; fi
           git commit -m "chore: bump version to $new_version"
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-          git push origin HEAD:main
+          git push origin HEAD:production
 
   build-and-deploy:
     needs: bump-version
