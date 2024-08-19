@@ -1,18 +1,18 @@
-name: Bump Version, Build, and Deploy to TestFlight
+name: Build, Bump Version, and Deploy to TestFlight
 
 on:
   push:
     branches:
+      - main
       - production
 
 permissions:
   contents: write
 
 jobs:
-  bump-version:
-    name: Bump Version
+  build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Check for EXPO_TOKEN
         run: |
@@ -21,6 +21,47 @@ jobs:
             exit 1
           fi
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: yarn
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: EAS build for iOS
+        if: github.ref == 'refs/heads/production'
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EAS_BUILD_PROFILE: production
+        run: |
+          eas build --platform ios --profile production --non-interactive
+
+      - name: Upload to TestFlight
+        if: github.ref == 'refs/heads/production'
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas submit --platform ios --latest --non-interactive || {
+            cat .eas/eas.log;
+            exit 1;
+          }
+
+  bump-version:
+    name: Bump Version
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/production'
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -72,48 +113,20 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
           git push origin HEAD:production
 
-  build-and-deploy:
-    needs: bump-version
+  sync-branches:
     runs-on: ubuntu-latest
-
+    if: github.ref == 'refs/heads/production'
+    needs: bump-version
     steps:
-      - name: Check for EXPO_TOKEN
-        run: |
-          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
-            exit 1
-          fi
-
-      - name: Checkout repository
+      - name: Checkout production branch
         uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-          cache: yarn
+          ref: production
 
-      - name: Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Install dependencies
-        run: yarn install
-
-      - name: EAS build for iOS
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          EAS_BUILD_PROFILE: production
+      - name: Merge production into main
         run: |
-          eas build --platform ios --profile production --non-interactive
-
-      - name: Upload to TestFlight
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: |
-          eas submit --platform ios --latest --non-interactive || {
-            cat .eas/eas.log;
-            exit 1;
-          }
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git checkout main
+          git merge production --no-ff
+          git push origin main
