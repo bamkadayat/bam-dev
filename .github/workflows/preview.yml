@@ -1,7 +1,8 @@
 name: Preview
 on:
   pull_request:
-
+    branches:
+      - production
 jobs:
   update:
     name: EAS Update
