@@ -1,26 +1,44 @@
 import { View, Text, ScrollView, Image, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "@/constants/images";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser, clearError } from "@/store/authSlice";
+import { RootState, AppDispatch } from "@/store/store";
 
 const SignUp = () => {
-  const [form, setform] = useState({
-    username:"",
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error } = useSelector((state: RootState) => state.auth);
+
+  const [form, setForm] = useState({
+    name: "",
     email: "",
     password: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const submit = async () => {
-    if(!form.username || !form.email || !form.password){
-      Alert.alert("Error", "All fields are required")
+    if (!form.name || !form.email || !form.password) {
+      Alert.alert("Error", "All fields are required");
+      return;
     }
-    setIsSubmitting(true)
-  }
+    dispatch(registerUser(form)).then((result) => {
+      if (registerUser.fulfilled.match(result)) {
+        Alert.alert("Success", "Account created successfully. Please sign in.");
+        router.push("/sign-in");
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Error", error);
+      dispatch(clearError());
+    }
+  }, [error]);
+
   return (
     <SafeAreaView className="bg-[#000000] h-full">
       <ScrollView>
@@ -37,34 +55,42 @@ const SignUp = () => {
           </Text>
 
           <FormField
-            title="Username"
-            value={form.username}
-            handleChangeText={(e: any) => setform({ ...form, username: e })}
+            title="Fullname"
+            value={form.name}
+            handleChangeText={(e: any) => setForm({ ...form, name: e })}
             otherStyles="mt-6 "
-           
           />
 
           <FormField
             title="Email"
             value={form.email}
-            handleChangeText={(e: any) => setform({ ...form, email: e })}
-            otherStyles="mt-6 "
-            keyboardType="email-address"
+            handleChangeText={(e: any) => setForm({ ...form, email: e })}
+            otherStyles="mt-6"
           />
 
           <FormField
             title="Password"
             value={form.password}
-            handleChangeText={(e: any) => setform({ ...form, password: e })}
+            handleChangeText={(e: any) => setForm({ ...form, password: e })}
             otherStyles="mt-6"
           />
 
-          <CustomButton title="Sign Up" handlePress={submit} containerStyles="mt-7" isLoading={isSubmitting} />
+          <CustomButton
+            title="Sign Up"
+            handlePress={submit}
+            containerStyles="mt-7"
+            isLoading={loading}
+          />
           <View className="justify-center pt-4 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">
               Have an account already?
             </Text>
-            <Link href="/sign-in" className="text-lg font-psemibold text-secondary">Sign In</Link>
+            <Link
+              href="/sign-in"
+              className="text-lg font-psemibold text-secondary"
+            >
+              Sign In
+            </Link>
           </View>
         </View>
       </ScrollView>

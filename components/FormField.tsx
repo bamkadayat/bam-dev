@@ -26,6 +26,8 @@ const FormField = ({
           onChangeText={handleChangeText}
           secureTextEntry={title === "Password" && !showPassword}
           keyboardType={keyboardType}
+          autoCapitalize="none" // Ensure no automatic capitalization
+          autoCorrect={false}
           {...props}
         />
         {title === "Password" && (
