@@ -11,6 +11,7 @@ import { router } from "expo-router";
 export default function App() {
   return (
     <SafeAreaView className="bg-[#000000] h-full">
+  
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="w-full min-h-[85vh] justify-center items-center flex-1 px-4">
           <Image
@@ -42,6 +43,7 @@ export default function App() {
         </View>
       </ScrollView>
       <StatusBar style="light" backgroundColor="#000000" />
+
     </SafeAreaView>
   );
 }

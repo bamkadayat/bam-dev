@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Slot, Stack, SplashScreen  } from "expo-router";
-import { useFonts } from 'expo-font'
+import { StyleSheet, View } from "react-native";
+import { Slot, Stack, SplashScreen } from "expo-router";
+import { useFonts } from 'expo-font';
 import { useEffect } from "react";
+import { Provider } from "react-redux";
+import { store } from "@/store/store"; // Ensure this path is correct
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [ fontsLoaded, error] = useFonts({
-   "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
+  const [fontsLoaded, error] = useFonts({
+    "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
     "Poppins-ExtraLight": require("../assets/fonts/Poppins-ExtraLight.ttf"),
@@ -17,17 +19,21 @@ export default function RootLayout() {
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
+
   useEffect(() => {
-    if(error) throw error;
-    if(fontsLoaded) SplashScreen.hideAsync();
+    if (error) throw error;
+    if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error]);
 
-  if(!fontsLoaded && !error ) return null;
+  if (!fontsLoaded && !error) return null;
+
   return (
-    <Stack>
-        <Stack.Screen name="index" options={{ headerShown:false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown:false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown:false }} />
-    </Stack>
+    <Provider store={store}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </Provider>
   );
 }

@@ -5,20 +5,26 @@
   },
   "build": {
     "development": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://todos-backend-l7o4myk5rq-ew.a.run.app"
+      },
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development"
     },
     "preview": {
       "distribution": "internal",
-       "channel": "preview"
+      "channel": "preview"
     },
     "production": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://todos-backend-l7o4myk5rq-ew.a.run.app"
+      },
       "autoIncrement": true,
       "ios": {
         "image": "latest"
       },
-      "channel": "production"   
+      "channel": "production"
     }
   },
   "submit": {
@@ -26,7 +32,7 @@
       "ios": {
         "appleId": "bamkadayat@gmail.com",
         "ascAppId": "6612020672",
-        "appleTeamId": "6KXL5DZFRT"  
+        "appleTeamId": "6KXL5DZFRT"
       }
     }
   }
